@@ -1,0 +1,37 @@
+﻿@model IEnumerable<MVCHomework.Models.ViewModels.AddBalanceViewModel>
+
+    <table class="table">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.BalanceType)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.BalanceMoney)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.BalacneDateTime)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.BalanceMemo)
+            </th>
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.BalanceType)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.BalanceMoney)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem =>  item.BalacneDateTime)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.BalanceMemo)
+            </td>
+
+        </tr>
+        }
+</table>
