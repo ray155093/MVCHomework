@@ -25,7 +25,7 @@ namespace MVCHomework.Models.ViewModels
         /// 紀錄金額
         /// </summary>
         [DisplayName("紀錄金額")]
-        public int BalanceMoney { get; set; }
+        public decimal BalanceMoney { get; set; }
         /// <summary>
         /// 紀錄時間
         /// </summary>
