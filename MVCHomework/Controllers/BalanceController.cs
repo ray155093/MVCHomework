@@ -4,14 +4,44 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using MVCHomework.Models;
+using static MVCHomework.Models.ViewModels.AddBalanceViewModel;
 
 namespace MVCHomework.Controllers
 {
     public class BalanceController : Controller
     {
-        // GET: Balance
         public ActionResult Create()
         {
+            return View();
+        }
+        /// <summary>
+        /// 新增收支資料
+        /// </summary>
+        /// <param name="oBalance"></param>
+        /// <returns></returns>
+        [HttpPost]
+        // GET: Balance
+        public ActionResult Create(AddBalanceViewModel oBalance)
+        {
+            AccountBook oaccountBook = new AccountBook();
+            oaccountBook.Categoryyy = Convert.ToInt16(oBalance.BalanceType) - 1;
+            oaccountBook.Dateee = oBalance.BalacneDateTime;
+            oaccountBook.Amounttt = oBalance.BalanceMoney;
+            oaccountBook.Remarkkk = oBalance.BalanceMemo;
+            oaccountBook.Id = Guid.NewGuid();
+            var db = new SkillTreeHomeworkEntities();
+            db.AccountBook.Add(oaccountBook);
+            db.SaveChanges();
+            List<AddBalanceViewModel> accountBooks = db.AccountBook
+                .OrderByDescending(s => s.Dateee)
+                .Take(10).Select(s => new AddBalanceViewModel
+                {
+                    BalanceType = (EBalanceType)(s.Categoryyy + 1),
+                    BalanceMoney = s.Amounttt,
+                    BalacneDateTime = s.Dateee,
+                    BalanceMemo = s.Remarkkk
+                }).ToList();
             return View();
         }
         /// <summary>
@@ -21,20 +51,20 @@ namespace MVCHomework.Controllers
         [ChildActionOnly]
         public ActionResult ShowDemoList()
         {
-            List<AddBalanceViewModel> olists = AddBalanceViewModel.GetDemoList();
-            return View(olists);
+            var db = new SkillTreeHomeworkEntities();
+            List<AddBalanceViewModel> accountBooks = db.AccountBook
+                .OrderByDescending(s => s.Dateee)
+                .Take(10).Select(s => new AddBalanceViewModel
+                {
+                    BalanceType = (EBalanceType)(s.Categoryyy + 1),
+                    BalanceMoney = s.Amounttt,
+                    BalacneDateTime = s.Dateee,
+                    BalanceMemo = s.Remarkkk
+                }).ToList();
+            return View(accountBooks);
         }
-        /// <summary>
-        /// 新增收支資料
-        /// </summary>
-        /// <param name="oBalance"></param>
-        /// <returns></returns>
-        [HttpPost]
-        public ActionResult AddBalance(AddBalanceViewModel oBalance)
-        {
-            AddBalanceViewModel.AddBalance(oBalance);
-            List<AddBalanceViewModel> olists = AddBalanceViewModel.GetDemoList();
-            return View(Create());
-        }
+
+
+
     }
 }
